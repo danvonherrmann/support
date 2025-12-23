@@ -1,990 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureVision Guest Services</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Metropolis', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333333;
-            background: linear-gradient(135deg, #2C6F9E 0%, #02B2DA 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #2C6F9E 0%, #02B2DA 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        header p {
-            font-size: 1.2em;
-            opacity: 0.95;
-        }
-        
-        .content {
-            padding: 40px;
-        }
-        
-        .search-section {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .search-section h2 {
-            color: #333333;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-        }
-        
-        .search-box {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 15px 50px 15px 20px;
-            font-size: 1.1em;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            transition: border-color 0.3s;
-        }
-        
-        .search-box input:focus {
-            outline: none;
-            border-color: #02B2DA;
-        }
-        
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 1.3em;
-        }
-        
-        .property-result {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            margin-top: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: none;
-        }
-        
-        .property-result.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .property-result h3 {
-            color: #02B2DA;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-        
-        .equipment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .equipment-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #02B2DA;
-        }
-        
-        .equipment-card h4 {
-            color: #2C6F9E;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-        
-        .equipment-card p {
-            color: #555;
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-        
-        .section {
-            margin-bottom: 40px;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        .section h2 {
-            color: #2C6F9E;
-            margin-bottom: 25px;
-            font-size: 2em;
-            border-bottom: 3px solid #02B2DA;
-            padding-bottom: 10px;
-        }
-        
-        .section h3 {
-            color: #333;
-            margin: 25px 0 15px 0;
-            font-size: 1.5em;
-        }
-        
-        .section h4 {
-            color: #555;
-            margin: 20px 0 10px 0;
-            font-size: 1.2em;
-        }
-        
-        .equipment-detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 25px;
-        }
-        
-        .equipment-detail-card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border-top: 4px solid #02B2DA;
-        }
-        
-        .equipment-detail-card h4 {
-            color: #2C6F9E;
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 10px;
-        }
-        
-        .button-list {
-            list-style: none;
-            margin-top: 15px;
-        }
-        
-        .button-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .button-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .button-name {
-            color: #02B2DA;
-            font-weight: 600;
-            display: inline-block;
-            min-width: 120px;
-        }
-        
-        .button-desc {
-            color: #666;
-        }
-        
-        .troubleshooting-category {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .troubleshooting-category h3 {
-            color: #2C6F9E;
-            margin-top: 0;
-            margin-bottom: 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .troubleshooting-category h3:hover {
-            color: #02B2DA;
-        }
-        
-        .toggle-icon {
-            font-size: 1.2em;
-            transition: transform 0.3s;
-        }
-        
-        .troubleshooting-category.open .toggle-icon {
-            transform: rotate(180deg);
-        }
-        
-        .troubleshooting-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        
-        .troubleshooting-category.open .troubleshooting-content {
-            max-height: 2000px;
-            transition: max-height 0.5s ease-in;
-        }
-        
-        .step-list {
-            list-style: none;
-            counter-reset: step-counter;
-        }
-        
-        .step-list li {
-            counter-increment: step-counter;
-            margin-bottom: 20px;
-            padding-left: 45px;
-            position: relative;
-        }
-        
-        .step-list li:before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: #02B2DA;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .tip-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        .tip-box strong {
-            color: #856404;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .warning-box {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        .warning-box strong {
-            color: #721c24;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .info-box {
-            background: #d1ecf1;
-            border-left: 4px solid #02B2DA;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        .info-box strong {
-            color: #0c5460;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .channel-package-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .package-btn {
-            padding: 12px 24px;
-            background: white;
-            border: 2px solid #02B2DA;
-            color: #2C6F9E;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .package-btn:hover {
-            background: #02B2DA;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(2, 178, 218, 0.3);
-        }
-        
-        .package-btn.active {
-            background: #2C6F9E;
-            color: white;
-            border-color: #2C6F9E;
-        }
-        
-        .channel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .channel-item {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
-        
-        .channel-item:hover {
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        
-        .channel-name {
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .channel-number {
-            color: #02B2DA;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        
-        .hd-badge {
-            background: #02B2DA;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75em;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        
-        .contact-section {
-            background: linear-gradient(135deg, #2C6F9E 0%, #02B2DA 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            border-radius: 10px;
-            margin-top: 40px;
-        }
-        
-        .contact-section h2 {
-            color: white;
-            border-bottom: none;
-            margin-bottom: 20px;
-        }
-        
-        .contact-section a {
-            color: white;
-            text-decoration: none;
-            font-size: 2em;
-            font-weight: bold;
-            padding: 15px 40px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-        
-        .contact-section a:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        .no-results {
-            color: #666;
-            font-style: italic;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .channel-package-content {
-            display: none;
-        }
-        
-        .channel-package-content.active {
-            display: block;
-        }
-        
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .equipment-grid, .equipment-detail-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .channel-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecureVision Guest Services</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;line-height:1.6;color:#333;background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);min-height:100vh;padding:20px}
+.container{max-width:1200px;margin:0 auto;background:#fff;border-radius:15px;box-shadow:0 10px 40px rgba(0,0,0,0.3);overflow:hidden}
+header{background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);color:#fff;padding:40px;text-align:center}
+header h1{font-size:2.5em;margin-bottom:10px}
+.content{padding:40px}
+.search-section{background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);padding:30px;border-radius:10px;margin-bottom:30px}
+.search-section h2{color:#2C6F9E;margin-bottom:20px}
+.search-box{position:relative}
+.search-box input{width:100%;padding:15px 50px 15px 20px;font-size:1.1em;border:2px solid #ddd;border-radius:8px}
+.search-box input:focus{outline:none;border-color:#02B2DA}
+.search-icon{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:#999;font-size:1.3em}
+.property-list{margin-top:20px;max-height:400px;overflow-y:auto;display:none}
+.property-list.active{display:block}
+.property-item{background:#fff;padding:15px 20px;margin-bottom:10px;border-radius:8px;cursor:pointer;transition:all 0.2s;border-left:4px solid #02B2DA}
+.property-item:hover{background:#f0f9ff;transform:translateX(5px);box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+.property-item h3{color:#2C6F9E;margin-bottom:5px}
+.property-item p{color:#666;font-size:0.9em}
+.property-details{display:none}
+.property-details.active{display:block;animation:fadeIn 0.3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.back-button{display:inline-block;padding:10px 20px;background:#02B2DA;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-bottom:20px;font-size:1em}
+.back-button:hover{background:#2C6F9E}
+.property-header{background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);color:#fff;padding:30px;border-radius:10px;margin-bottom:30px}
+.property-header h2{font-size:2em;margin-bottom:15px}
+.equipment-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:15px}
+.equipment-badge{background:rgba(255,255,255,0.2);padding:15px;border-radius:8px}
+.equipment-badge strong{display:block;font-size:0.9em;opacity:0.9;margin-bottom:5px}
+.equipment-badge span{font-size:1.2em}
+.equipment-section,.channel-section,.faq-section{background:#f8f9fa;padding:30px;border-radius:10px;margin-bottom:30px}
+.equipment-section h3,.channel-section h3,.faq-section h3{color:#2C6F9E;font-size:1.8em;margin-bottom:20px;border-bottom:3px solid #02B2DA;padding-bottom:10px}
+.equipment-card{background:#fff;padding:25px;border-radius:10px;margin-bottom:25px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #02B2DA}
+.equipment-card h4{color:#2C6F9E;font-size:1.3em;margin-bottom:15px}
+.button-list{list-style:none;margin-top:15px}
+.button-list li{padding:8px 0;border-bottom:1px solid #f0f0f0}
+.button-list li:last-child{border-bottom:none}
+.button-name{color:#02B2DA;font-weight:600;display:inline-block;min-width:120px}
+.button-desc{color:#666}
+.channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:20px}
+.channel-item{background:#fff;padding:12px 15px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,0.05)}
+.channel-name{font-weight:500;color:#333}
+.channel-number{color:#02B2DA;font-weight:bold}
+.hd-badge{background:#02B2DA;color:#fff;padding:2px 6px;border-radius:4px;font-size:0.7em;margin-left:6px}
+.faq-item{background:#fff;padding:20px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.faq-question{color:#2C6F9E;font-weight:600;font-size:1.1em;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-question:hover{color:#02B2DA}
+.toggle-icon{font-size:1.2em;transition:transform 0.3s}
+.faq-item.open .toggle-icon{transform:rotate(180deg)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height 0.3s ease-out}
+.faq-item.open .faq-answer{max-height:1000px;transition:max-height 0.5s ease-in}
+.step-list{list-style:none;counter-reset:step;margin-top:10px}
+.step-list li{counter-increment:step;margin-bottom:12px;padding-left:35px;position:relative}
+.step-list li:before{content:counter(step);position:absolute;left:0;background:#02B2DA;color:#fff;width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.85em}
+.tip-box{background:#fff3cd;border-left:4px solid #ffc107;padding:12px;margin:12px 0;border-radius:4px}
+.tip-box strong{color:#856404}
+.contact-section{background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);color:#fff;padding:30px;text-align:center;border-radius:10px;margin-top:30px}
+.contact-section h3{color:#fff;margin-bottom:15px}
+.contact-section a{color:#fff;text-decoration:none;font-size:1.5em;font-weight:bold}
+@media (max-width:768px){.content{padding:20px}header h1{font-size:1.8em}.equipment-summary,.channel-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏖️ SecureVision Guest Services</h1>
-            <p>Your Complete Guide to TV & WiFi Services</p>
-        </header>
-        
-        <div class="content">
-            <!-- Property Search Section -->
-            <div class="search-section">
-                <h2>🔍 Find Your Property Information</h2>
-                <p style="margin-bottom: 20px; color: #555;">Enter your property name to view your equipment and channel lineup</p>
-                
-                <div class="tip-box" style="margin-bottom: 20px;">
-                    <strong>📱 Scanned a QR Code?</strong>
-                    Your property information should load automatically! If not, use the search box below.
-                </div>
-                
-                <div class="search-box">
-                    <input type="text" id="propertySearch" placeholder="Search for your property (e.g., Admiral's Quarters, Beach House)...">
-                    <span class="search-icon">🔍</span>
-                </div>
-                <div id="propertyResult" class="property-result"></div>
-            </div>
-            
-            <!-- Equipment Identification Section -->
-            <div class="section">
-                <h2>📺 Equipment Identification Guide</h2>
-                
-                <h3>Cable Boxes / Receivers</h3>
-                <div class="equipment-detail-grid">
-                    <div class="equipment-detail-card">
-                        <h4>DISH Wally Receiver</h4>
-                        <p style="margin-bottom: 15px;"><strong>Description:</strong> Small black rectangular box with "Wally" branding. Most common receiver in SecureVision properties.</p>
-                        <p style="margin-bottom: 10px;"><strong>Connections & Inputs:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Power Input:</span> <span class="button-desc">AC power cord (back of box)</span></li>
-                            <li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial cable connection (screw-type)</span></li>
-                            <li><span class="button-name">HDMI Out:</span> <span class="button-desc">Connects to TV (best quality)</span></li>
-                            <li><span class="button-name">USB Ports:</span> <span class="button-desc">For external storage/playback</span></li>
-                            <li><span class="button-name">Ethernet:</span> <span class="button-desc">Network connection (optional)</span></li>
-                        </ul>
-                        <p style="margin-top: 15px;"><strong>Front Panel Buttons:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
-                            <li><span class="button-name">System Info:</span> <span class="button-desc">Display receiver & card IDs</span></li>
-                            <li><span class="button-name">Locate Remote:</span> <span class="button-desc">Makes remote beep</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="equipment-detail-card">
-                        <h4>DISH ViP 211 Receiver</h4>
-                        <p style="margin-bottom: 15px;"><strong>Description:</strong> Older silver/black rectangular box with "DISH" branding and blue display screen.</p>
-                        <p style="margin-bottom: 10px;"><strong>Connections & Inputs:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Power Input:</span> <span class="button-desc">AC power cord (back of box)</span></li>
-                            <li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial cable connection</span></li>
-                            <li><span class="button-name">HDMI Out:</span> <span class="button-desc">Digital video/audio to TV</span></li>
-                            <li><span class="button-name">Component Out:</span> <span class="button-desc">Red/Green/Blue video cables</span></li>
-                            <li><span class="button-name">Composite Out:</span> <span class="button-desc">Yellow/Red/White cables</span></li>
-                            <li><span class="button-name">Optical Audio:</span> <span class="button-desc">Digital audio output</span></li>
-                        </ul>
-                        <p style="margin-top: 15px;"><strong>Front Panel Buttons:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
-                            <li><span class="button-name">Info:</span> <span class="button-desc">Display program information</span></li>
-                            <li><span class="button-name">Select:</span> <span class="button-desc">Make selections</span></li>
-                            <li><span class="button-name">Up/Down:</span> <span class="button-desc">Channel navigation</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="equipment-detail-card">
-                        <h4>OnStream M2 Evolve</h4>
-                        <p style="margin-bottom: 15px;"><strong>Description:</strong> Modern black streaming receiver with sleek design. Used in select properties with OnStream service.</p>
-                        <p style="margin-bottom: 10px;"><strong>Connections & Inputs:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Power Input:</span> <span class="button-desc">AC adapter connection</span></li>
-                            <li><span class="button-name">HDMI Out:</span> <span class="button-desc">Main connection to TV</span></li>
-                            <li><span class="button-name">Ethernet:</span> <span class="button-desc">Wired network connection</span></li>
-                            <li><span class="button-name">WiFi:</span> <span class="button-desc">Built-in wireless capability</span></li>
-                            <li><span class="button-name">USB:</span> <span class="button-desc">For updates and media</span></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <h3 style="margin-top: 40px;">Remote Controls</h3>
-                <div class="equipment-detail-grid">
-                    <div class="equipment-detail-card">
-                        <h4>DISH 52.0/54.0 Remote (Wally Remote)</h4>
-                        <p style="margin-bottom: 15px;"><strong>Description:</strong> Black remote with red trim along the side. Voice control capable. Most common in newer installations.</p>
-                        <p style="margin-bottom: 10px;"><strong>Key Buttons & Functions:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">Home:</span> <span class="button-desc">Main menu & guide access</span></li>
-                            <li><span class="button-name">Voice:</span> <span class="button-desc">Voice search & commands</span></li>
-                            <li><span class="button-name">TV (side):</span> <span class="button-desc">Switch to TV control mode</span></li>
-                            <li><span class="button-name">Input (side):</span> <span class="button-desc">Change TV inputs/sources</span></li>
-                            <li><span class="button-name">SAT (side):</span> <span class="button-desc">Switch to satellite control mode</span></li>
-                            <li><span class="button-name">Volume +/-:</span> <span class="button-desc">Adjust TV volume (when paired)</span></li>
-                            <li><span class="button-name">Power:</span> <span class="button-desc">Turn TV on/off (when paired)</span></li>
-                            <li><span class="button-name">Info:</span> <span class="button-desc">Display program information</span></li>
-                            <li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide & schedule</span></li>
-                            <li><span class="button-name">Options:</span> <span class="button-desc">Additional settings menu</span></li>
-                            <li><span class="button-name">DVR:</span> <span class="button-desc">Recorded programs (if equipped)</span></li>
-                            <li><span class="button-name">Skip Back/Forward:</span> <span class="button-desc">10-second skip buttons</span></li>
-                            <li><span class="button-name">Rewind/Fast Forward:</span> <span class="button-desc">Playback control</span></li>
-                            <li><span class="button-name">Play/Pause:</span> <span class="button-desc">Control playback</span></li>
-                            <li><span class="button-name">Record:</span> <span class="button-desc">Record programs (if equipped)</span></li>
-                            <li><span class="button-name">Number Pad:</span> <span class="button-desc">Direct channel entry</span></li>
-                            <li><span class="button-name">Dash (-):</span> <span class="button-desc">Enter sub-channels (e.g., 5-1)</span></li>
-                        </ul>
-                        <div class="tip-box" style="margin-top: 15px;">
-                            <strong>💡 Pro Tip:</strong>
-                            The buttons on the SIDE of the remote (TV, Input, SAT) are the most important for troubleshooting!
-                        </div>
-                    </div>
-                    
-                    <div class="equipment-detail-card">
-                        <h4>DISH 40.0 Remote (Older Models)</h4>
-                        <p style="margin-bottom: 15px;"><strong>Description:</strong> Black/silver remote with white TV button at top. Used with ViP receivers and older installations.</p>
-                        <p style="margin-bottom: 10px;"><strong>Key Buttons & Functions:</strong></p>
-                        <ul class="button-list">
-                            <li><span class="button-name">TV (top):</span> <span class="button-desc">Switch to TV control mode (white button)</span></li>
-                            <li><span class="button-name">Input (top):</span> <span class="button-desc">Change TV inputs/sources</span></li>
-                            <li><span class="button-name">SAT (top):</span> <span class="button-desc">Switch to satellite mode</span></li>
-                            <li><span class="button-name">Mode Buttons:</span> <span class="button-desc">Switch between TV/VCR/AUX modes</span></li>
-                            <li><span class="button-name">Power:</span> <span class="button-desc">Turn devices on/off</span></li>
-                            <li><span class="button-name">Volume +/-:</span> <span class="button-desc">Adjust volume (when programmed)</span></li>
-                            <li><span class="button-name">Mute:</span> <span class="button-desc">Silence audio</span></li>
-                            <li><span class="button-name">Info:</span> <span class="button-desc">Display program information</span></li>
-                            <li><span class="button-name">Menu:</span> <span class="button-desc">Access main menu</span></li>
-                            <li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide</span></li>
-                            <li><span class="button-name">Arrow Keys:</span> <span class="button-desc">Navigate menus</span></li>
-                            <li><span class="button-name">Select:</span> <span class="button-desc">Confirm selections</span></li>
-                            <li><span class="button-name">Cancel:</span> <span class="button-desc">Go back/exit</span></li>
-                            <li><span class="button-name">DVR Controls:</span> <span class="button-desc">Pause, rewind, fast forward</span></li>
-                            <li><span class="button-name">Number Pad:</span> <span class="button-desc">Direct channel entry</span></li>
-                            <li><span class="button-name">Recall:</span> <span class="button-desc">Return to previous channel</span></li>
-                            <li><span class="button-name"># (Pound):</span> <span class="button-desc">Confirms programming codes</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Channel Lineup Section -->
-            <div class="section">
-                <h2>📡 Channel Lineups</h2>
-                <p style="margin-bottom: 20px;">Select your package below to view available channels. Your property search above will show which package you have.</p>
-                
-                <div class="channel-package-selector">
-                    <button class="package-btn active" onclick="showPackage('basic-plus')">Basic Plus</button>
-                    <button class="package-btn" onclick="showPackage('expanded')">Expanded</button>
-                    <button class="package-btn" onclick="showPackage('premier')">Premier</button>
-                    <button class="package-btn" onclick="showPackage('premium')">Premium</button>
-                </div>
-                
-                <!-- Basic Plus Package -->
-                <div id="basic-plus" class="channel-package-content active">
-                    <h3>Basic Plus Package</h3>
-                    <p style="margin-bottom: 20px; color: #666;">Essential cable channels plus local networks and popular entertainment</p>
-                    <div id="basicPlusChannels" class="channel-grid"></div>
-                </div>
-                
-                <!-- Expanded Package -->
-                <div id="expanded" class="channel-package-content">
-                    <h3>Expanded Package</h3>
-                    <p style="margin-bottom: 20px; color: #666;">All Basic Plus channels plus premium sports, movies, and entertainment</p>
-                    <div class="info-box">
-                        <strong>📺 Includes Everything in Basic Plus, PLUS:</strong>
-                        Additional premium channels including expanded sports coverage, movie channels, and specialty networks
-                    </div>
-                    <div class="channel-grid">
-                        <div class="channel-item"><span class="channel-name">Additional Sports Networks</span></div>
-                        <div class="channel-item"><span class="channel-name">More Movie Channels</span></div>
-                        <div class="channel-item"><span class="channel-name">Extended Family & Kids Programming</span></div>
-                    </div>
-                </div>
-                
-                <!-- Premier Package -->
-                <div id="premier" class="channel-package-content">
-                    <h3>Premier Package</h3>
-                    <p style="margin-bottom: 20px; color: #666;">Most comprehensive package with premium movie channels</p>
-                    <div class="info-box">
-                        <strong>📺 Includes Everything in Expanded, PLUS:</strong>
-                        Premium movie packages including Starz, Starz Encore, and additional premium content
-                    </div>
-                    <div class="channel-grid">
-                        <div class="channel-item"><span class="channel-name">Starz (E)</span><span class="channel-number">350</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz (W)</span><span class="channel-number">351</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz Edge</span><span class="channel-number">352</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz Cinema</span><span class="channel-number">353</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz Comedy</span><span class="channel-number">354</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz in Black</span><span class="channel-number">355</span></div>
-                        <div class="channel-item"><span class="channel-name">Starz Kids and Family</span><span class="channel-number">356</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore (E)</span><span class="channel-number">340</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore (W)</span><span class="channel-number">341</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Westerns</span><span class="channel-number">342</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Action</span><span class="channel-number">343</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Suspense</span><span class="channel-number">344</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Black</span><span class="channel-number">345</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Classic</span><span class="channel-number">346</span></div>
-                        <div class="channel-item"><span class="channel-name">Encore Family</span><span class="channel-number">347</span></div>
-                    </div>
-                </div>
-                
-                <!-- Premium Package -->
-                <div id="premium" class="channel-package-content">
-                    <h3>Premium Package</h3>
-                    <p style="margin-bottom: 20px; color: #666;">Ultimate package with all premium movie channels</p>
-                    <div class="info-box">
-                        <strong>📺 Includes Everything in Premier, PLUS:</strong>
-                        HBO, Cinemax, Showtime, and all other premium movie packages
-                    </div>
-                    <div class="channel-grid">
-                        <div class="channel-item"><span class="channel-name">HBO (E)</span><span class="channel-number">300</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO (W)</span><span class="channel-number">303</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO2 (E)</span><span class="channel-number">301</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO2 (W)</span><span class="channel-number">304</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO Comedy</span><span class="channel-number">307</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO Family</span><span class="channel-number">305</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO Latino</span><span class="channel-number">309</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO Signature</span><span class="channel-number">302</span></div>
-                        <div class="channel-item"><span class="channel-name">HBO Zone</span><span class="channel-number">308</span></div>
-                        <div class="channel-item"><span class="channel-name">Cinemax (E)</span><span class="channel-number">310</span></div>
-                        <div class="channel-item"><span class="channel-name">Cinemax (W)</span><span class="channel-number">311</span></div>
-                        <div class="channel-item"><span class="channel-name">More Max</span><span class="channel-number">312</span></div>
-                        <div class="channel-item"><span class="channel-name">Action Max</span><span class="channel-number">313</span></div>
-                        <div class="channel-item"><span class="channel-name">5 Star Max</span><span class="channel-number">314</span></div>
-                        <div class="channel-item"><span class="channel-name">Max Latino</span><span class="channel-number">315</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime (E)</span><span class="channel-number">318</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime (W)</span><span class="channel-number">319</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime Beyond</span><span class="channel-number">323</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime Extreme</span><span class="channel-number">322</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime Showcase</span><span class="channel-number">321</span></div>
-                        <div class="channel-item"><span class="channel-name">Showtime Too</span><span class="channel-number">320</span></div>
-                        <div class="channel-item"><span class="channel-name">The Movie Channel</span><span class="channel-number">327</span></div>
-                        <div class="channel-item"><span class="channel-name">Flix</span><span class="channel-number">333</span></div>
-                    </div>
-                </div>
-                
-                <div class="info-box" style="margin-top: 25px;">
-                    <strong>📺 All Packages Include:</strong>
-                    Local channels (ABC, CBS, FOX, NBC), SiriusXM Music Channels (72 channels), and WiFi service
-                </div>
-            </div>
-            
-            <!-- Troubleshooting Guide -->
-            <div class="section">
-                <h2>🛠️ Troubleshooting Guide</h2>
-                <p style="margin-bottom: 25px;">Click on any issue below to see step-by-step solutions</p>
-                
-                <!-- TV Input Issues -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        TV on Wrong Input / No Signal
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <p><strong>Symptoms:</strong> Black screen, blue screen, "No Signal" message, stuck on smart TV apps (Roku, Netflix, etc.)</p>
-                        
-                        <div class="info-box">
-                            <strong>💡 This is the #1 most common issue!</strong>
-                            Your TV is simply on the wrong input. This is quick and easy to fix.
-                        </div>
-                        
-                        <h4>Method 1: Using Your DISH Remote</h4>
-                        <ol class="step-list">
-                            <li><strong>Find your DISH remote.</strong> It should be black with red trim (newer Wally remote) or black/silver (older remote).</li>
-                            <li><strong>Press the TV button once.</strong> On Wally remotes, this is on the side. On older remotes, it's a white button at the top.</li>
-                            <li><strong>Press the Input button repeatedly.</strong> Also on the side of Wally remotes, or below the TV button on older remotes.</li>
-                            <li><strong>Wait 2-3 seconds on each input</strong> that appears (HDMI 1, HDMI 2, etc.) until you see your DISH picture.</li>
-                            <li><strong>Press the SAT button</strong> when the picture appears. This is critical! The screen may say "Press SAT to watch TV."</li>
-                        </ol>
-                        
-                        <h4>Method 2: Using Your TV's Remote</h4>
-                        <ol class="step-list">
-                            <li><strong>Find your TV's original remote</strong> (Samsung, LG, Vizio, etc.)</li>
-                            <li><strong>Press the Source or Input button</strong> on the TV remote.</li>
-                            <li><strong>Use arrow keys to select each HDMI input</strong> one by one until the DISH picture appears.</li>
-                            <li><strong>Press SAT on your DISH remote</strong> once the picture is restored.</li>
-                        </ol>
-                        
-                        <h4>Method 3: Using TV Buttons</h4>
-                        <ol class="step-list">
-                            <li><strong>Look for physical buttons on your TV.</strong> They're usually on the side, back, or bottom edge.</li>
-                            <li><strong>Find and press the Input or Source button</strong> repeatedly until DISH appears.</li>
-                            <li><strong>Press SAT on your DISH remote</strong> to complete the process.</li>
-                        </ol>
-                        
-                        <div class="warning-box">
-                            <strong>⚠️ Important Final Step</strong>
-                            Always press the SAT button after getting your picture back, or the remote won't change channels!
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- WiFi Connectivity -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        WiFi Connection Issues
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <p><strong>Symptoms:</strong> No internet, slow connection, can't find WiFi network, asking for password</p>
-                        
-                        <h4>Finding Your WiFi Network</h4>
-                        <p>Your WiFi network name (SSID) typically includes your property name or unit number. Look for networks like "SecureVision-[Property]" or similar.</p>
-                        
-                        <div class="tip-box">
-                            <strong>💡 WiFi Password Information</strong>
-                            Passwords are case-sensitive! Make sure to enter capital and lowercase letters exactly as shown. If you need your WiFi password, please call us at <strong>251-967-4455</strong> with your property name and unit number.
-                        </div>
-                        
-                        <h4>Connection Problems</h4>
-                        <ol class="step-list">
-                            <li><strong>Forget and reconnect to the network.</strong> Go to your device's WiFi settings, select your network, choose "Forget," then reconnect with your password.</li>
-                            <li><strong>Restart your device.</strong> Turn your phone, tablet, or laptop completely off and back on.</li>
-                            <li><strong>Check for service alerts.</strong> There may be a building-wide internet outage. Contact us to check network status.</li>
-                            <li><strong>Try multiple devices.</strong> If only one device has issues, the problem is likely with that device, not the network.</li>
-                        </ol>
-                        
-                        <h4>Slow Speeds or Buffering</h4>
-                        <ol class="step-list">
-                            <li><strong>Move closer to the router</strong> if possible. WiFi strength decreases with distance and obstacles.</li>
-                            <li><strong>Check how many devices are connected.</strong> Many devices using WiFi simultaneously can slow speeds.</li>
-                            <li><strong>Restart your device</strong> to establish a fresh connection.</li>
-                            <li><strong>Contact us if issues persist.</strong> We can remotely reboot your router or send a technician if needed.</li>
-                        </ol>
-                        
-                        <div class="info-box">
-                            <strong>📱 Pro Tip: Toggle Airplane Mode</strong>
-                            On phones and tablets, turning Airplane Mode on for 10 seconds, then off again, can help re-establish a better connection.
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Signal Loss -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        "Complete Signal Loss" or "Acquiring Signal"
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <p><strong>Symptoms:</strong> TV shows "Complete Signal Loss," "Partial Signal Loss," or is stuck on "Acquiring Signal" screen</p>
-                        
-                        <div class="warning-box">
-                            <strong>⚠️ First Check</strong>
-                            Make sure your TV is on the correct input first! See the "TV on Wrong Input" section above. If you see a DISH error message (not just "No Signal"), continue below.
-                        </div>
-                        
-                        <h4>Running a System Scan</h4>
-                        <ol class="step-list">
-                            <li><strong>Check cable connections.</strong> Make sure the coaxial cable (screws in) is tight at both the wall and back of the DISH box.</li>
-                            <li><strong>Access diagnostics:</strong>
-                                <ul style="margin-top: 10px; margin-left: 20px;">
-                                    <li><strong>Wally Remote:</strong> Press the Home button 3 times, go to "Dish" > "Test Installation"</li>
-                                    <li><strong>Older Remote:</strong> Press Menu, then dial 6-1-1 on the keypad</li>
-                                </ul>
-                            </li>
-                            <li><strong>Start the scan/test.</strong> This can take 5-15 minutes. Don't interrupt it!</li>
-                            <li><strong>After the scan:</strong> If channels still aren't working, unplug the DISH box from power for 30 seconds, then plug it back in.</li>
-                        </ol>
-                        
-                        <div class="tip-box">
-                            <strong>💡 What if the scan fails?</strong>
-                            If you see "fewer satellites detected," select "Cancel" (NOT Save), then do a power cycle. If problems continue, please call us.
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Remote Control Problems -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        Remote Control Not Working
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <p><strong>Symptoms:</strong> Remote won't change channels, won't control TV volume/power, unresponsive buttons</p>
-                        
-                        <h4>Basic Fixes (Try These First!)</h4>
-                        <ol class="step-list">
-                            <li><strong>Replace batteries.</strong> This fixes most remote issues! If no lights appear when you press buttons, batteries are definitely dead.</li>
-                            <li><strong>Press the SAT button.</strong> If the remote won't change channels but works otherwise, you're likely in TV mode. Press the SAT button once to return to satellite control.</li>
-                            <li><strong>Check line of sight.</strong> Point the remote directly at the DISH receiver (not the TV) when changing channels.</li>
-                        </ol>
-                        
-                        <h4>Re-Pairing Remote to DISH Box</h4>
-                        <ol class="step-list">
-                            <li><strong>Locate the DISH receiver</strong> (the box under or near the TV).</li>
-                            <li><strong>Press the "Locate Remote" button</strong> on the front of the box. Your remote should start beeping.</li>
-                            <li><strong>If it doesn't beep:</strong> Press the "System Info" button on the box, then press and hold the SAT button on your remote until it beeps.</li>
-                        </ol>
-                        
-                        <h4>Programming Remote for TV Volume/Power</h4>
-                        <p><strong>Wally Remote (Black with red trim):</strong></p>
-                        <ol class="step-list">
-                            <li>Press the Home button twice</li>
-                            <li>Go to Settings > Remote Control > TV</li>
-                            <li>Select "TV Pairing Wizard"</li>
-                            <li>Choose your TV brand and test the codes provided</li>
-                        </ol>
-                        
-                        <p style="margin-top: 20px;"><strong>Older Remote (40.0):</strong></p>
-                        <ol class="step-list">
-                            <li>Press and hold the TV button until all other buttons flash</li>
-                            <li>Enter your TV brand's 3-digit code (examples below)</li>
-                            <li>Press the # (pound) key</li>
-                            <li>Test volume up/down buttons</li>
-                        </ol>
-                        
-                        <div class="tip-box">
-                            <strong>💡 Common TV Codes</strong>
-                            <ul style="margin-top: 10px; margin-left: 20px;">
-                                <li>Samsung: 504, 506, 654, 794</li>
-                                <li>Vizio: 505, 627</li>
-                                <li>LG: 512, 766</li>
-                                <li>Sony: 502, 639</li>
-                                <li>If one code doesn't work, try the others for your brand!</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Missing Channels -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        Missing Channels / "Programming Not Authorized"
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <p><strong>Symptoms:</strong> Only see a few channels, pay-per-view, DishScapes, or "Programming Not Authorized" message</p>
-                        
-                        <div class="info-box">
-                            <strong>📡 What's happening?</strong>
-                            Your receiver needs to receive an "activation signal" from the provider. This happens when the box has been unplugged for a while or after certain resets.
-                        </div>
-                        
-                        <h4>Getting Your Channels Back</h4>
-                        <ol class="step-list">
-                            <li><strong>Don't worry - this is normal!</strong> The receiver just needs a refresh signal from us.</li>
-                            <li><strong>Call SecureVision at 251-967-4455.</strong> We'll need to send an activation "hit" to your receiver.</li>
-                            <li><strong>We'll need two ID numbers from your receiver:</strong>
-                                <ul style="margin-top: 10px; margin-left: 20px;">
-                                    <li>Press the System Info button on the front of the DISH box, or</li>
-                                    <li>Press Home 3 times (Wally) or Menu twice (older remote)</li>
-                                    <li>Read us the Receiver ID (starts with 'R') and Smart Card ID (starts with 'S')</li>
-                                </ul>
-                            </li>
-                            <li><strong>Leave the receiver powered on.</strong> It takes 15-45 minutes for channels to be restored after we send the signal.</li>
-                            <li><strong>Try a reboot if needed.</strong> If channels haven't returned after 30 minutes, unplug the box for 30 seconds and plug it back in.</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <!-- General Network Issues -->
-                <div class="troubleshooting-category">
-                    <h3 onclick="toggleTroubleshooting(this)">
-                        General Internet Connection Steps
-                        <span class="toggle-icon">▼</span>
-                    </h3>
-                    <div class="troubleshooting-content">
-                        <h4>Connecting to WiFi</h4>
-                        <ol class="step-list">
-                            <li><strong>Open WiFi settings on your device.</strong> On most devices, this is in Settings > WiFi (or Network).</li>
-                            <li><strong>Make sure WiFi is turned ON.</strong> Some devices have a physical switch or button to enable wireless.</li>
-                            <li><strong>Look for your property's network.</strong> Network names typically include your property name or unit number.</li>
-                            <li><strong>Select your network</strong> and enter the password (case-sensitive!).</li>
-                            <li><strong>Wait for connection.</strong> It may take 10-30 seconds to connect.</li>
-                            <li><strong>Open a web browser</strong> and try loading a website to confirm you're online.</li>
-                        </ol>
-                        
-                        <div class="tip-box">
-                            <strong>💡 Can't see your network?</strong>
-                            <ul style="margin-top: 10px; margin-left: 20px;">
-                                <li>Move closer to where you think the router might be (often in closets or near the TV)</li>
-                                <li>Make sure your device's WiFi is enabled</li>
-                                <li>Try turning WiFi off and on again on your device</li>
-                                <li>The network may be temporarily offline - contact us to check</li>
-                            </ul>
-                        </div>
-                        
-                        <h4>Understanding Network Names</h4>
-                        <p>SecureVision WiFi networks may appear as:</p>
-                        <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li><strong>SecureVision-[PropertyName]</strong></li>
-                            <li><strong>[PropertyName]-WiFi</strong></li>
-                            <li><strong>SVI-[BuildingName]</strong></li>
-                            <li>Or a variation including your building or unit identifier</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>⚠️ Password Security</strong>
-                            Never share your WiFi password publicly or with unauthorized guests. For password changes, contact us via email at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cdbeaca1a8be8dbea8aebba4bee3aea2a0">[email&#160;protected]</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Contact Section -->
-            <div class="contact-section">
-                <h2>📞 Need Additional Help?</h2>
-                <p style="font-size: 1.2em; margin-bottom: 20px;">Our support team is here to assist you 24/7</p>
-                <a href="tel:251-967-4455">251-967-4455</a>
-                <p style="margin-top: 20px; font-size: 1.1em;">You can also submit a ticket at:</p>
-                <a href="https://ipacketnetworks.happyfox.com/new/" style="font-size: 1.2em; margin-top: 10px;">ipacketnetworks.happyfox.com/new/</a>
-            </div>
-        </div>
-    </div>
-    
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Property data will be embedded here
-        const propertiesData = [
+<div class="container">
+<header>
+<h1>🏖️ SecureVision Guest Services</h1>
+<p>Find Your Property for Personalized TV & WiFi Support</p>
+</header>
+<div class="content">
+<div class="search-section" id="searchSection">
+<h2>🔍 Search for Your Property</h2>
+<div class="search-box">
+<input type="text" id="propertySearch" placeholder="Type your property name (e.g., Admiral's Quarters, Phoenix, Beach House)...">
+<span class="search-icon">🔍</span>
+</div>
+<div class="property-list" id="propertyList"></div>
+</div>
+<div class="property-details" id="propertyDetails">
+<button class="back-button" id="backButton">← Back to Search</button>
+<div class="property-header" id="propertyHeader"></div>
+<div class="equipment-section" id="equipmentSection"></div>
+<div class="channel-section" id="channelSection"></div>
+<div class="faq-section">
+<h3>❓ Troubleshooting & FAQs</h3>
+<div class="faq-item">
+<div class="faq-question">TV says "No Signal" or black screen<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<ul class="step-list">
+<li>Check that the TV is on the correct input (press INPUT button on remote)</li>
+<li>Make sure the cable box is powered on (look for lights on the front)</li>
+<li>Check that all cables are firmly connected behind the TV and box</li>
+<li>Try unplugging the cable box for 30 seconds, then plug it back in</li>
+<li>Wait 3-5 minutes for the box to fully restart</li>
+</ul>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Remote isn't working<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<ul class="step-list">
+<li>Check that batteries are installed correctly (+ and - aligned)</li>
+<li>Try replacing the batteries with fresh ones</li>
+<li>Press the SAT button on the side/top of the remote</li>
+<li>Point the remote directly at the cable box (not the TV)</li>
+<li>Make sure nothing is blocking the front of the cable box</li>
+</ul>
+<div class="tip-box"><strong>💡 Pro Tip:</strong> The TV, INPUT, and SAT buttons on the side/top of the remote are the most important for troubleshooting!</div>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Can't find a specific channel<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<ul class="step-list">
+<li>Check your channel lineup above to see if it's included in your package</li>
+<li>Try typing the channel number directly using the number pad</li>
+<li>Press the GUIDE button to browse all available channels</li>
+<li>Some channels may have multiple HD/SD versions (e.g., 200 and 200-1)</li>
+</ul>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Picture is frozen or pixelated<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<ul class="step-list">
+<li>Check the weather - heavy rain/storms can temporarily affect the signal</li>
+<li>Try changing to a different channel to see if the problem persists</li>
+<li>Unplug the cable box for 30 seconds and plug it back in</li>
+<li>Wait 3-5 minutes for a full reboot</li>
+<li>If problem continues after weather clears, contact support</li>
+</ul>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Need WiFi password<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<p>Your WiFi password should be provided in your welcome materials or check-in information. If you can't find it:</p>
+<ul class="step-list">
+<li>Check your confirmation email or welcome packet</li>
+<li>Look for a card near the TV or on the refrigerator</li>
+<li>Contact property management or the front desk</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="contact-section">
+<h3>Still Need Help?</h3>
+<p>Our support team is here to assist you</p>
+<p style="margin-top:15px;"><a href="tel:2519674455">📞 Call 251-967-4455</a></p>
+</div>
+</div>
+</div>
+</div>
+<script>
+const propertiesData=[
   {
     "name": "Admiral's Quarters",
     "tv_package": "Premier",
@@ -3009,9 +2182,7 @@
     "address": "17642 Front Beach Rd"
   }
 ];
-        
-        // Channel data for Basic Plus
-        const basicPlusChannels = [
+const basicPlusChannels=[
   {
     "name": "3ABN",
     "number": "9393.0",
@@ -3987,126 +3158,193 @@
     "number": "6057.0",
     "hd": false
   }
-];
-        
-        // Search functionality
-        const searchInput = document.getElementById('propertySearch');
-        const resultDiv = document.getElementById('propertyResult');
-        
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.trim().toLowerCase();
-            
-            if (searchTerm.length < 2) {
-                resultDiv.classList.remove('active');
-                return;
-            }
-            
-            // Find matching properties
-            const matches = propertiesData.filter(prop => 
-                prop.name.toLowerCase().includes(searchTerm)
-            );
-            
-            if (matches.length === 0) {
-                resultDiv.innerHTML = '<p class="no-results">No properties found. Please try a different search term.</p>';
-                resultDiv.classList.add('active');
-                return;
-            }
-            
-            // Show first 5 matches
-            let html = '';
-            matches.slice(0, 5).forEach(prop => {
-                html += `
-                    <div style="margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #eee;">
-                        <h3>${prop.name}</h3>
-                        ${prop.city ? `<p style="color: #666; margin-bottom: 15px;">${prop.address ? prop.address + ', ' : ''}${prop.city}</p>` : ''}
-                        <div class="equipment-grid">
-                            <div class="equipment-card">
-                                <h4>📺 TV Package</h4>
-                                <p>${prop.tv_package}</p>
-                            </div>
-                            <div class="equipment-card">
-                                <h4>📦 Receiver Model</h4>
-                                <p>${prop.receiver_model}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            if (matches.length > 5) {
-                html += `<p style="color: #666; font-style: italic; text-align: center;">Showing first 5 of ${matches.length} results. Refine your search for more specific results.</p>`;
-            }
-            
-            resultDiv.innerHTML = html;
-            resultDiv.classList.add('active');
-        });
-        
-        // Toggle troubleshooting sections
-        function toggleTroubleshooting(element) {
-            const category = element.parentElement;
-            category.classList.toggle('open');
-        }
-        
-        // Channel package switching
-        function showPackage(packageName) {
-            // Hide all packages
-            document.querySelectorAll('.channel-package-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.package-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected package
-            document.getElementById(packageName).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
-        
-        // Populate Basic Plus channels
-        function populateBasicPlusChannels() {
-            const container = document.getElementById('basicPlusChannels');
-            let html = '';
-            
-            basicPlusChannels.forEach(channel => {
-                const hdBadge = channel.hd ? '<span class="hd-badge">HD</span>' : '';
-                html += `
-                    <div class="channel-item">
-                        <span class="channel-name">${channel.name}${hdBadge}</span>
-                        <span class="channel-number">${channel.number}</span>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-        
-        // URL parameter handling for QR codes
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
-        
-        // Check if property parameter exists (from QR code)
-        function handleQRCodeParameter() {
-            const propertyParam = getUrlParameter('property');
-            if (propertyParam) {
-                // Set the search input value
-                searchInput.value = propertyParam;
-                
-                // Trigger the search
-                const event = new Event('input', { bubbles: true });
-                searchInput.dispatchEvent(event);
-                
-                // Scroll to the search section after a brief delay
-                setTimeout(() => {
-                    document.querySelector('.search-section').scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-           
+];const searchInput=document.getElementById('propertySearch');
+const propertyList=document.getElementById('propertyList');
+const searchSection=document.getElementById('searchSection');
+const propertyDetails=document.getElementById('propertyDetails');
+const backButton=document.getElementById('backButton');
+let currentMatches=[];
+searchInput.addEventListener('input',function(){
+const searchTerm=this.value.toLowerCase().trim();
+if(searchTerm.length<2){propertyList.classList.remove('active');propertyList.innerHTML='';return}
+const matches=propertiesData.filter(prop=>prop.name.toLowerCase().includes(searchTerm));
+const uniqueMatches=[];
+const seen=new Set();
+for(const prop of matches){
+if(!seen.has(prop.name)){seen.add(prop.name);uniqueMatches.push(prop)}
+}
+currentMatches=uniqueMatches;
+if(uniqueMatches.length>0){
+propertyList.innerHTML=uniqueMatches.map((prop,idx)=>`
+<div class="property-item" data-index="${idx}">
+<h3>${prop.name}</h3>
+<p>${prop.receiver_model} • ${prop.tv_package} Package</p>
+</div>
+`).join('');
+propertyList.classList.add('active');
+document.querySelectorAll('.property-item').forEach(item=>{
+item.addEventListener('click',function(){
+const idx=parseInt(this.getAttribute('data-index'));
+const propData=currentMatches[idx];
+showPropertyDetails(propData)
+})
+})
+}else{
+propertyList.innerHTML='<div class="property-item"><p>No properties found matching "'+searchTerm+'"</p></div>';
+propertyList.classList.add('active')
+}
+});
+function showPropertyDetails(property){
+searchSection.style.display='none';
+propertyDetails.classList.add('active');
+window.scrollTo(0,0);
+document.getElementById('propertyHeader').innerHTML=`
+<h2>${property.name}</h2>
+<div class="equipment-summary">
+<div class="equipment-badge"><strong>TV Package</strong><span>${property.tv_package}</span></div>
+<div class="equipment-badge"><strong>Receiver</strong><span>${property.receiver_model}</span></div>
+<div class="equipment-badge"><strong>Remote</strong><span>${getRemoteType(property.receiver_model)}</span></div>
+</div>
+`;
+populateEquipment(property);
+populateChannels(property.tv_package)
+}
+function getRemoteType(receiver){
+if(receiver.includes('Wally'))return'DISH 52.0/54.0';
+if(receiver.includes('ViP 211'))return'DISH 40.0';
+if(receiver.includes('M2 Evolve'))return'OnStream Remote';
+return'Standard Remote'
+}
+function populateEquipment(property){
+const equipmentSection=document.getElementById('equipmentSection');
+let html='<h3>📺 Your Equipment Guide</h3>';
+if(property.receiver_model.includes('Wally')){
+html+=`<div class="equipment-card"><h4>DISH Wally Receiver</h4>
+<p><strong>Front Panel Buttons:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
+<li><span class="button-name">System Info:</span> <span class="button-desc">Display receiver details</span></li>
+<li><span class="button-name">Locate Remote:</span> <span class="button-desc">Makes remote beep</span></li>
+</ul>
+<p style="margin-top:15px;"><strong>Connections:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">HDMI Out:</span> <span class="button-desc">Connect to TV (best quality)</span></li>
+<li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial cable from dish</span></li>
+<li><span class="button-name">Power:</span> <span class="button-desc">AC power cord</span></li>
+</ul></div>`
+}else if(property.receiver_model.includes('ViP 211')){
+html+=`<div class="equipment-card"><h4>DISH ViP 211 Receiver</h4>
+<p><strong>Front Panel Buttons:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
+<li><span class="button-name">Info:</span> <span class="button-desc">Display program information</span></li>
+<li><span class="button-name">Select:</span> <span class="button-desc">Make selections</span></li>
+<li><span class="button-name">Up/Down:</span> <span class="button-desc">Navigate channels</span></li>
+</ul>
+<p style="margin-top:15px;"><strong>Connections:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">HDMI Out:</span> <span class="button-desc">Digital video/audio to TV</span></li>
+<li><span class="button-name">Component Out:</span> <span class="button-desc">Red/Green/Blue video cables</span></li>
+<li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial from dish</span></li>
+</ul></div>`
+}
+if(getRemoteType(property.receiver_model)==='DISH 52.0/54.0'){
+html+=`<div class="equipment-card"><h4>DISH 52.0/54.0 Remote Control</h4>
+<div class="tip-box"><strong>💡 Most Important Buttons:</strong> The TV, INPUT, and SAT buttons on the SIDE of the remote!</div>
+<p><strong>Key Buttons:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">TV (side):</span> <span class="button-desc">Switch to TV control mode</span></li>
+<li><span class="button-name">INPUT (side):</span> <span class="button-desc">Change TV inputs/sources</span></li>
+<li><span class="button-name">SAT (side):</span> <span class="button-desc">Switch to satellite mode</span></li>
+<li><span class="button-name">Home:</span> <span class="button-desc">Main menu access</span></li>
+<li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide</span></li>
+<li><span class="button-name">Volume +/-:</span> <span class="button-desc">Adjust TV volume</span></li>
+<li><span class="button-name">Power:</span> <span class="button-desc">Turn TV on/off</span></li>
+</ul></div>`
+}else if(getRemoteType(property.receiver_model)==='DISH 40.0'){
+html+=`<div class="equipment-card"><h4>DISH 40.0 Remote Control</h4>
+<div class="tip-box"><strong>💡 Most Important Button:</strong> The white TV button at the top of the remote!</div>
+<p><strong>Key Buttons:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">TV (top):</span> <span class="button-desc">Switch to TV mode (white button)</span></li>
+<li><span class="button-name">INPUT:</span> <span class="button-desc">Change TV inputs</span></li>
+<li><span class="button-name">SAT:</span> <span class="button-desc">Switch to satellite mode</span></li>
+<li><span class="button-name">Menu:</span> <span class="button-desc">Access main menu</span></li>
+<li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide</span></li>
+<li><span class="button-name">Power:</span> <span class="button-desc">Turn devices on/off</span></li>
+</ul></div>`
+}
+equipmentSection.innerHTML=html
+}
+function populateChannels(tvPackage){
+const channelSection=document.getElementById('channelSection');
+let html='<h3>📺 Your Channel Lineup</h3>';
+html+='<p style="margin-bottom:20px;">These are the channels included in your <strong>'+tvPackage+'</strong> package:</p>';
+let channelsToShow=[];
+if(tvPackage==='Basic Plus'){
+channelsToShow=basicPlusChannels
+}else if(tvPackage==='Expanded'){
+channelsToShow=basicPlusChannels;
+html+='<div class="tip-box"><strong>Note:</strong> You have the Expanded package, which includes all Basic Plus channels PLUS additional premium sports and movie channels.</div>'
+}else if(tvPackage==='Premier'){
+channelsToShow=basicPlusChannels;
+html+='<div class="tip-box"><strong>Note:</strong> You have the Premier package, which includes all channels plus Starz and Encore packages (15 premium channels).</div>'
+}else if(tvPackage==='Premium'){
+channelsToShow=basicPlusChannels;
+html+='<div class="tip-box"><strong>Note:</strong> You have the Premium package - our ultimate tier with ALL channels including HBO, Cinemax, Showtime, and more (60+ premium channels total).</div>'
+}else{
+html+='<p>Contact support for your specific channel lineup information.</p>'
+}
+if(channelsToShow.length>0){
+html+='<div class="channel-grid">';
+channelsToShow.forEach(channel=>{
+const hdBadge=channel.hd?'<span class="hd-badge">HD</span>':'';
+html+=`<div class="channel-item">
+<span class="channel-name">${channel.name}${hdBadge}</span>
+<span class="channel-number">${channel.number}</span>
+</div>`
+});
+html+='</div>'
+}
+channelSection.innerHTML=html
+}
+backButton.addEventListener('click',function(){
+propertyDetails.classList.remove('active');
+searchSection.style.display='block';
+searchInput.value='';
+propertyList.innerHTML='';
+propertyList.classList.remove('active');
+window.scrollTo(0,0)
+});
+document.addEventListener('click',function(e){
+if(e.target.classList.contains('faq-question')||e.target.parentElement.classList.contains('faq-question')){
+const faqItem=e.target.closest('.faq-item');
+faqItem.classList.toggle('open')
+}
+});
+function getUrlParameter(name){
+name=name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+const regex=new RegExp('[\\?&]'+name+'=([^&#]*)');
+const results=regex.exec(location.search);
+return results===null?'':decodeURIComponent(results[1].replace(/\+/g,' '))
+}
+function handleQRCodeParameter(){
+const propertyParam=getUrlParameter('property');
+if(propertyParam){
+searchInput.value=propertyParam;
+const event=new Event('input',{bubbles:true});
+searchInput.dispatchEvent(event);
+setTimeout(()=>{
+const exactMatch=propertiesData.find(p=>p.name.toLowerCase()===propertyParam.toLowerCase());
+if(exactMatch){
+showPropertyDetails(exactMatch)
+}
+},500)
+}
+}
+window.addEventListener('load',function(){
+handleQRCodeParameter()
+});
+</script>
+</body>
+</html>
