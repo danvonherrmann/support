@@ -35,9 +35,34 @@ header h1{font-size:2.5em;margin-bottom:10px}
 .equipment-badge strong{display:block;font-size:0.9em;opacity:0.9;margin-bottom:5px}
 .equipment-badge span{font-size:1.2em}
 .equipment-section,.channel-section,.faq-section{background:#f8f9fa;padding:30px;border-radius:10px;margin-bottom:30px}
-.equipment-section h3,.channel-section h3,.faq-section h3{color:#2C6F9E;font-size:1.8em;margin-bottom:20px;border-bottom:3px solid #02B2DA;padding-bottom:10px}
+.equipment-section h3,.faq-section h3{color:#2C6F9E;font-size:1.8em;margin-bottom:20px;border-bottom:3px solid #02B2DA;padding-bottom:10px}
+.channel-section h3{color:#2C6F9E;font-size:1.8em;margin-bottom:20px;border-bottom:3px solid #02B2DA;padding-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.channel-section h3:hover{color:#02B2DA}
+.channel-section-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease-out}
+.channel-section.open .channel-section-content{max-height:5000px;transition:max-height 0.6s ease-in}
+.section-toggle{font-size:0.8em;transition:transform 0.3s;color:#02B2DA}
+.channel-section.open .section-toggle{transform:rotate(180deg)}
+.section-header{cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.section-header:hover{color:#02B2DA}
+.section-toggle{font-size:1.5em;transition:transform 0.3s;color:#02B2DA}
+.section-header.collapsed .section-toggle{transform:rotate(-90deg)}
+.section-content{max-height:5000px;overflow:hidden;transition:max-height 0.4s ease-out}
+.section-content.collapsed{max-height:0;transition:max-height 0.3s ease-in}
+.quick-help-section{background:#f8f9fa;padding:30px;border-radius:10px;margin-bottom:30px;border:2px solid #02B2DA}
+.quick-help-section h3{color:#2C6F9E;font-size:1.8em;margin-bottom:15px;border-bottom:3px solid #02B2DA;padding-bottom:10px}
+.issue-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:15px}
+.issue-btn{background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);color:#fff;border:none;padding:15px 20px;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 3px 8px rgba(0,0,0,0.15)}
+.issue-btn:hover{transform:translateY(-3px);box-shadow:0 5px 15px rgba(0,0,0,0.25)}
+.issue-btn:active{transform:translateY(-1px)}
+.faq-search-box input{width:100%;padding:12px 20px;font-size:1em;border:2px solid #ddd;border-radius:8px;transition:border-color 0.3s}
+.faq-search-box input:focus{outline:none;border-color:#02B2DA;box-shadow:0 0 0 3px rgba(2,178,218,0.1)}
 .equipment-card{background:#fff;padding:25px;border-radius:10px;margin-bottom:25px;box-shadow:0 3px 10px rgba(0,0,0,0.1);border-top:4px solid #02B2DA}
-.equipment-card h4{color:#2C6F9E;font-size:1.3em;margin-bottom:15px}
+.equipment-card h4{color:#2C6F9E;font-size:1.3em;margin-bottom:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.equipment-card h4:hover{color:#02B2DA}
+.equipment-card-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease-out}
+.equipment-card.open .equipment-card-content{max-height:2000px;transition:max-height 0.6s ease-in}
+.equipment-toggle{font-size:1.2em;transition:transform 0.3s;color:#02B2DA}
+.equipment-card.open .equipment-toggle{transform:rotate(180deg)}
 .button-list{list-style:none;margin-top:15px}
 .button-list li{padding:8px 0;border-bottom:1px solid #f0f0f0}
 .button-list li:last-child{border-bottom:none}
@@ -63,7 +88,7 @@ header h1{font-size:2.5em;margin-bottom:10px}
 .contact-section{background:linear-gradient(135deg,#2C6F9E 0%,#02B2DA 100%);color:#fff;padding:30px;text-align:center;border-radius:10px;margin-top:30px}
 .contact-section h3{color:#fff;margin-bottom:15px}
 .contact-section a{color:#fff;text-decoration:none;font-size:1.5em;font-weight:bold}
-@media (max-width:768px){.content{padding:20px}header h1{font-size:1.8em}.equipment-summary,.channel-grid{grid-template-columns:1fr}}
+@media (max-width:768px){.content{padding:20px}header h1{font-size:1.8em}.equipment-summary,.channel-grid{grid-template-columns:1fr}.issue-buttons{grid-template-columns:1fr}.issue-btn{font-size:0.95em;padding:12px 15px}}
 </style>
 </head>
 <body>
@@ -75,42 +100,127 @@ header h1{font-size:2.5em;margin-bottom:10px}
 <div class="content">
 <div class="search-section" id="searchSection">
 <h2>🔍 Search for Your Property</h2>
+<p style="margin-bottom:15px;color:#555;"><strong>Start typing your property name below:</strong></p>
 <div class="search-box">
-<input type="text" id="propertySearch" placeholder="Type your property name (e.g., Admiral's Quarters, Phoenix, Beach House)...">
+<input type="text" id="propertySearch" placeholder="Type your property name (e.g., Admiral's Quarters, Phoenix, Beach House)..." autofocus>
 <span class="search-icon">🔍</span>
 </div>
 <div class="property-list" id="propertyList"></div>
+<div style="margin-top:20px;padding:15px;background:#d1ecf1;border-radius:8px;font-size:0.9em;">
+<strong>💡 Tip:</strong> Start typing at least 2 characters to see matching properties
+</div>
 </div>
 <div class="property-details" id="propertyDetails">
 <button class="back-button" id="backButton">← Back to Search</button>
 <div class="property-header" id="propertyHeader"></div>
 <div class="equipment-section" id="equipmentSection"></div>
 <div class="channel-section" id="channelSection"></div>
+<div class="quick-help-section">
+<h3>🚀 Quick Help</h3>
+<p style="margin-bottom:20px;">Click a button for instant help with common issues:</p>
+<div class="issue-buttons">
+<button class="issue-btn" data-faq="0">📺 No Signal</button>
+<button class="issue-btn" data-faq="1">🎮 Remote Issues</button>
+<button class="issue-btn" data-faq="2">🔇 No Sound</button>
+<button class="issue-btn" data-faq="3">📡 Missing Channels</button>
+<button class="issue-btn" data-faq="4">🖼️ Picture Quality</button>
+<button class="issue-btn" data-faq="5">📶 WiFi Problems</button>
+</div>
+<div class="faq-search-box" style="margin-top:25px;">
+<p style="margin-bottom:10px;"><strong>Or search for your issue:</strong></p>
+<input type="text" id="faqSearch" placeholder="Type to filter FAQs (e.g., 'sound', 'wifi', 'remote')...">
+</div>
+</div>
 <div class="faq-section">
 <h3>❓ Troubleshooting & FAQs</h3>
 <div class="faq-item">
 <div class="faq-question">TV says "No Signal" or black screen<span class="toggle-icon">▼</span></div>
 <div class="faq-answer">
+<p><strong>Check Power First:</strong></p>
 <ul class="step-list">
-<li>Check that the TV is on the correct input (press INPUT button on remote)</li>
 <li>Make sure the cable box is powered on (look for lights on the front)</li>
-<li>Check that all cables are firmly connected behind the TV and box</li>
-<li>Try unplugging the cable box for 30 seconds, then plug it back in</li>
+<li>Check all light switches near the TV</li>
+<li>If TV powers on, check the power strip or outlet for the cable box</li>
+</ul>
+<p style="margin-top:12px;"><strong>Check TV Input:</strong></p>
+<ul class="step-list">
+<li>Press INPUT button on your remote or TV</li>
+<li>Try changing inputs manually with TV remote or button on TV</li>
+<li>Look for HDMI1, HDMI2, or similar labels</li>
+<li>The correct input should show the cable box screen</li>
+</ul>
+<p style="margin-top:12px;"><strong>Check Connections:</strong></p>
+<ul class="step-list">
+<li>Make sure all cables are firmly connected behind the TV and box</li>
+<li>Check that HDMI cable is securely plugged in both ends</li>
+</ul>
+<p style="margin-top:12px;"><strong>Restart the Box:</strong></p>
+<ul class="step-list">
+<li>Unplug the cable box for 30 seconds</li>
+<li>Plug it back in</li>
 <li>Wait 3-5 minutes for the box to fully restart</li>
 </ul>
+<div class="tip-box">
+<strong>⚠️ See an error message?</strong> Messages like "Complete Signal Loss" or "Programming Not Authorized" require technical support. Call 251-967-4455 immediately.
+</div>
 </div>
 </div>
 <div class="faq-item">
 <div class="faq-question">Remote isn't working<span class="toggle-icon">▼</span></div>
 <div class="faq-answer">
+<p><strong>Check Batteries:</strong></p>
 <ul class="step-list">
 <li>Check that batteries are installed correctly (+ and - aligned)</li>
-<li>Try replacing the batteries with fresh ones</li>
+<li>Try replacing with fresh batteries</li>
+</ul>
+<p style="margin-top:12px;"><strong>Check Remote Mode:</strong></p>
+<ul class="step-list">
 <li>Press the SAT button on the side/top of the remote</li>
+<li>Make sure you're in satellite mode, not TV mode</li>
+<li>The SAT mode light should be on</li>
+</ul>
+<p style="margin-top:12px;"><strong>Check Line of Sight:</strong></p>
+<ul class="step-list">
 <li>Point the remote directly at the cable box (not the TV)</li>
 <li>Make sure nothing is blocking the front of the cable box</li>
+<li>Remove any objects between remote and box</li>
 </ul>
-<div class="tip-box"><strong>💡 Pro Tip:</strong> The TV, INPUT, and SAT buttons on the side/top of the remote are the most important for troubleshooting!</div>
+<div class="tip-box">
+<strong>💡 Pro Tip:</strong> The buttons on the SIDE or TOP of the remote (TV, INPUT, SAT) are the most important! Press SAT to control the cable box, TV to control the TV.
+</div>
+<p style="margin-top:12px;"><strong>Still not working?</strong> Try these:</p>
+<ul class="step-list">
+<li>Unplug the cable box for 30 seconds and plug back in</li>
+<li>Test if the TV remote works (rules out TV issues)</li>
+<li>If nothing works, call 251-967-4455 for replacement</li>
+</ul>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">No sound or audio issues<span class="toggle-icon">▼</span></div>
+<div class="faq-answer">
+<p><strong>Quick Fix - Power Cycle:</strong></p>
+<ul class="step-list">
+<li>Unplug both the TV and cable box</li>
+<li>Wait 30 seconds</li>
+<li>Plug both back in</li>
+<li>If volume returns to normal, you're all set!</li>
+</ul>
+<p style="margin-top:12px;"><strong>Sound works on TV apps but not cable box?</strong></p>
+<ul class="step-list">
+<li>Unplug the HDMI cable from both the TV and cable box</li>
+<li>Try plugging it into a different HDMI port on the TV</li>
+<li>Make sure both ends are firmly connected</li>
+</ul>
+<p style="margin-top:12px;"><strong>Still no sound?</strong></p>
+<ul class="step-list">
+<li>Try a different HDMI cable if available</li>
+<li>Check TV volume settings and mute button</li>
+<li>If nothing works, call 251-967-4455</li>
+</ul>
+<div class="tip-box">
+<strong>💡 Note:</strong> If sound works for Netflix/apps but not the cable box, it's usually an HDMI connection issue, not the box itself.
+</div>
 </div>
 </div>
 <div class="faq-item">
@@ -137,26 +247,49 @@ header h1{font-size:2.5em;margin-bottom:10px}
 </div>
 </div>
 <div class="faq-item">
-<div class="faq-question">Need WiFi password<span class="toggle-icon">▼</span></div>
+<div class="faq-question">WiFi Connection Issues<span class="toggle-icon">▼</span></div>
 <div class="faq-answer">
-<p>Your WiFi password should be provided in your welcome materials or check-in information. If you can't find it:</p>
+<p><strong>First, determine the issue:</strong></p>
 <ul class="step-list">
-<li>Check your confirmation email or welcome packet</li>
-<li>Look for a card near the TV or on the refrigerator</li>
-<li>Contact property management or the front desk</li>
+<li>Is it one device or multiple devices that cannot connect?</li>
+<li>Do you see the correct unit number or SSID on the list of available connections?</li>
+<li>Verify the SSID/network name that you are trying to connect to</li>
+</ul>
+<p style="margin-top:12px;"><strong>Single Device Issues:</strong></p>
+<ul class="step-list">
+<li>Verify password is entered correctly (check CAPS LOCK is OFF)</li>
+<li>Try "forgetting" the network and reconnecting</li>
+<li>Restart the device</li>
+</ul>
+<p style="margin-top:12px;"><strong>Multiple Devices or No Connection Available:</strong></p>
+<ul class="step-list">
+<li>Check if router has power (look for lights)</li>
+<li>Try unplugging router for 30 seconds, then plug back in</li>
+<li>Wait 2-3 minutes for router to fully restart</li>
+<li>Try connecting again</li>
+</ul>
+<div class="tip-box">
+<strong>💡 Need WiFi Password?</strong> Check your confirmation email, welcome packet, or look for a card near the TV or on the refrigerator. Owners/management can contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d4e5c51584e7d4e585e4b544e135e5250">[email&#160;protected]</a> to add or change passwords.
+</div>
+<p style="margin-top:12px;"><strong>Still having issues?</strong> Call SecureVision 24/7 at <strong>251-967-4455</strong> for:</p>
+<ul style="margin-top:8px;margin-left:20px">
+<li>Router has no power/lights</li>
+<li>Password doesn't work (case sensitive)</li>
+<li>Slow speeds or connectivity issues</li>
 </ul>
 </div>
 </div>
 </div>
 <div class="contact-section">
 <h3>Still Need Help?</h3>
-<p>Our support team is here to assist you</p>
+<p><strong>SecureVision Support is available 24/7, 365 days a year</strong></p>
 <p style="margin-top:15px;"><a href="tel:2519674455">📞 Call 251-967-4455</a></p>
+<p style="margin-top:10px;font-size:0.9em;">For technical support, troubleshooting, or service questions</p>
 </div>
 </div>
 </div>
 </div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const propertiesData=[
   {
     "name": "Admiral's Quarters",
@@ -3217,9 +3350,14 @@ return'Standard Remote'
 }
 function populateEquipment(property){
 const equipmentSection=document.getElementById('equipmentSection');
-let html='<h3>📺 Your Equipment Guide</h3>';
+let html='<div class="section-header" onclick="toggleSection(this)"><h3>📺 Your Equipment Guide</h3><span class="section-toggle">▼</span></div><div class="section-content">';
 if(property.receiver_model.includes('Wally')){
-html+=`<div class="equipment-card"><h4>DISH Wally Receiver</h4>
+html+=`<div class="equipment-card">
+<h4 onclick="this.parentElement.classList.toggle('open')">
+DISH Wally Receiver
+<span class="equipment-toggle">▼</span>
+</h4>
+<div class="equipment-card-content">
 <p><strong>Front Panel Buttons:</strong></p>
 <ul class="button-list">
 <li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
@@ -3231,9 +3369,26 @@ html+=`<div class="equipment-card"><h4>DISH Wally Receiver</h4>
 <li><span class="button-name">HDMI Out:</span> <span class="button-desc">Connect to TV (best quality)</span></li>
 <li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial cable from dish</span></li>
 <li><span class="button-name">Power:</span> <span class="button-desc">AC power cord</span></li>
-</ul></div>`
+</ul>
+<p style="margin-top:15px;"><strong>Common Issues & Solutions:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">No Power:</span> <span class="button-desc">Check light switches near TV. If TV powers on, check power strip or outlet</span></li>
+<li><span class="button-name">Wrong Input:</span> <span class="button-desc">Change inputs manually with TV remote or button on TV</span></li>
+<li><span class="button-name">No Sound:</span> <span class="button-desc">Unplug TV and Wally for 30 seconds. If sound works on TV apps but not DISH, try different HDMI port or replace HDMI cable</span></li>
+<li><span class="button-name">Error Messages:</span> <span class="button-desc">"Complete Signal Loss" or "Programming Not Authorized" - Call 251-967-4455</span></li>
+<li><span class="button-name">Missing Channels:</span> <span class="button-desc">Call SecureVision at 251-967-4455</span></li>
+<li><span class="button-name">Picture Too Large:</span> <span class="button-desc">Screen formatting needed - Call 251-967-4455</span></li>
+<li><span class="button-name">Closed Captioning:</span> <span class="button-desc">Call 251-967-4455 for assistance</span></li>
+</ul>
+</div>
+</div>`
 }else if(property.receiver_model.includes('ViP 211')){
-html+=`<div class="equipment-card"><h4>DISH ViP 211 Receiver</h4>
+html+=`<div class="equipment-card">
+<h4 onclick="this.parentElement.classList.toggle('open')">
+DISH ViP 211 Receiver
+<span class="equipment-toggle">▼</span>
+</h4>
+<div class="equipment-card-content">
 <p><strong>Front Panel Buttons:</strong></p>
 <ul class="button-list">
 <li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
@@ -3246,10 +3401,27 @@ html+=`<div class="equipment-card"><h4>DISH ViP 211 Receiver</h4>
 <li><span class="button-name">HDMI Out:</span> <span class="button-desc">Digital video/audio to TV</span></li>
 <li><span class="button-name">Component Out:</span> <span class="button-desc">Red/Green/Blue video cables</span></li>
 <li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial from dish</span></li>
-</ul></div>`
+</ul>
+<p style="margin-top:15px;"><strong>Common Issues & Solutions:</strong></p>
+<ul class="button-list">
+<li><span class="button-name">No Power:</span> <span class="button-desc">Check light switches near TV. If TV powers on, check power strip or outlet</span></li>
+<li><span class="button-name">Wrong Input:</span> <span class="button-desc">Change inputs manually with TV remote or button on TV</span></li>
+<li><span class="button-name">No Sound:</span> <span class="button-desc">Unplug TV and ViP 211 for 30 seconds. If sound works on TV apps but not DISH, try different HDMI port or replace HDMI cable</span></li>
+<li><span class="button-name">Error Messages:</span> <span class="button-desc">"Complete Signal Loss", "Programming Not Authorized", or "Signal Acquisition in Progress" - Call 251-967-4455</span></li>
+<li><span class="button-name">Missing Channels:</span> <span class="button-desc">Call SecureVision at 251-967-4455</span></li>
+<li><span class="button-name">Picture Too Large:</span> <span class="button-desc">Screen formatting needed - Call 251-967-4455</span></li>
+<li><span class="button-name">Closed Captioning:</span> <span class="button-desc">Call 251-967-4455 for assistance</span></li>
+</ul>
+</div>
+</div>`
 }
 if(getRemoteType(property.receiver_model)==='DISH 52.0/54.0'){
-html+=`<div class="equipment-card"><h4>DISH 52.0/54.0 Remote Control</h4>
+html+=`<div class="equipment-card">
+<h4 onclick="this.parentElement.classList.toggle('open')">
+DISH 52.0/54.0 Remote Control
+<span class="equipment-toggle">▼</span>
+</h4>
+<div class="equipment-card-content">
 <div class="tip-box"><strong>💡 Most Important Buttons:</strong> The TV, INPUT, and SAT buttons on the SIDE of the remote!</div>
 <p><strong>Key Buttons:</strong></p>
 <ul class="button-list">
@@ -3260,9 +3432,16 @@ html+=`<div class="equipment-card"><h4>DISH 52.0/54.0 Remote Control</h4>
 <li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide</span></li>
 <li><span class="button-name">Volume +/-:</span> <span class="button-desc">Adjust TV volume</span></li>
 <li><span class="button-name">Power:</span> <span class="button-desc">Turn TV on/off</span></li>
-</ul></div>`
+</ul>
+</div>
+</div>`
 }else if(getRemoteType(property.receiver_model)==='DISH 40.0'){
-html+=`<div class="equipment-card"><h4>DISH 40.0 Remote Control</h4>
+html+=`<div class="equipment-card">
+<h4 onclick="this.parentElement.classList.toggle('open')">
+DISH 40.0 Remote Control
+<span class="equipment-toggle">▼</span>
+</h4>
+<div class="equipment-card-content">
 <div class="tip-box"><strong>💡 Most Important Button:</strong> The white TV button at the top of the remote!</div>
 <p><strong>Key Buttons:</strong></p>
 <ul class="button-list">
@@ -3272,13 +3451,17 @@ html+=`<div class="equipment-card"><h4>DISH 40.0 Remote Control</h4>
 <li><span class="button-name">Menu:</span> <span class="button-desc">Access main menu</span></li>
 <li><span class="button-name">Guide:</span> <span class="button-desc">Channel guide</span></li>
 <li><span class="button-name">Power:</span> <span class="button-desc">Turn devices on/off</span></li>
-</ul></div>`
+</ul>
+</div>
+</div>`
 }
+html+='</div>';
 equipmentSection.innerHTML=html
 }
 function populateChannels(tvPackage){
 const channelSection=document.getElementById('channelSection');
-let html='<h3>📺 Your Channel Lineup</h3>';
+let html='<h3 onclick="this.parentElement.classList.toggle(\'open\')">📺 Your Channel Lineup<span class="section-toggle">▼</span></h3>';
+html+='<div class="channel-section-content">';
 html+='<p style="margin-bottom:20px;">These are the channels included in your <strong>'+tvPackage+'</strong> package:</p>';
 let channelsToShow=[];
 if(tvPackage==='Basic Plus'){
@@ -3306,6 +3489,7 @@ html+=`<div class="channel-item">
 });
 html+='</div>'
 }
+html+='</div>';
 channelSection.innerHTML=html
 }
 backButton.addEventListener('click',function(){
@@ -3316,11 +3500,51 @@ propertyList.innerHTML='';
 propertyList.classList.remove('active');
 window.scrollTo(0,0)
 });
+function toggleSection(header){
+const content=header.nextElementSibling;
+if(content&&content.classList.contains('section-content')){
+content.classList.toggle('collapsed');
+header.classList.toggle('collapsed')
+}
+}
 document.addEventListener('click',function(e){
 if(e.target.classList.contains('faq-question')||e.target.parentElement.classList.contains('faq-question')){
 const faqItem=e.target.closest('.faq-item');
 faqItem.classList.toggle('open')
 }
+});
+const faqSearchInput=document.getElementById('faqSearch');
+if(faqSearchInput){
+faqSearchInput.addEventListener('input',function(){
+const searchTerm=this.value.toLowerCase().trim();
+const faqItems=document.querySelectorAll('.faq-item');
+faqItems.forEach(item=>{
+const question=item.querySelector('.faq-question').textContent.toLowerCase();
+const answer=item.querySelector('.faq-answer').textContent.toLowerCase();
+if(question.includes(searchTerm)||answer.includes(searchTerm)){
+item.style.display='block'
+}else{
+item.style.display='none'
+}
+})
+})
+}
+const issueButtons=document.querySelectorAll('.issue-btn');
+issueButtons.forEach(btn=>{
+btn.addEventListener('click',function(){
+const faqIndex=parseInt(this.getAttribute('data-faq'));
+const faqItems=document.querySelectorAll('.faq-item');
+if(faqItems[faqIndex]){
+faqItems.forEach((item,idx)=>{
+if(idx===faqIndex){
+item.classList.add('open');
+item.scrollIntoView({behavior:'smooth',block:'center'})
+}else{
+item.classList.remove('open')
+}
+})
+}
+})
 });
 function getUrlParameter(name){
 name=name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
