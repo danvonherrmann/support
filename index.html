@@ -3350,40 +3350,112 @@ return'Standard Remote'
 }
 function populateEquipment(property){
 const equipmentSection=document.getElementById('equipmentSection');
-let html='<div class="section-header" onclick="toggleSection(this)"><h3>📺 Your Equipment Guide</h3><span class="section-toggle">▼</span></div><div class="section-content">';
+let html='<h3 style="color:#2C6F9E;margin:30px 0 20px 0;">📺 Your Equipment Guide</h3>';
+
 if(property.receiver_model.includes('Wally')){
-html+=`<div class="equipment-card">
-<h4 onclick="this.parentElement.classList.toggle('open')">
-DISH Wally Receiver
-<span class="equipment-toggle">▼</span>
-</h4>
-<div class="equipment-card-content">
-<p><strong>Front Panel Buttons:</strong></p>
-<ul class="button-list">
-<li><span class="button-name">Power:</span> <span class="button-desc">Turn receiver on/off</span></li>
-<li><span class="button-name">System Info:</span> <span class="button-desc">Display receiver details</span></li>
-<li><span class="button-name">Locate Remote:</span> <span class="button-desc">Makes remote beep</span></li>
+html+=`
+<div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+<h4 style="color:#2C6F9E;margin-bottom:15px;">DISH Wally Receiver</h4>
+<p style="margin-bottom:15px;"><strong>Front Panel Buttons:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>Power:</strong> Turn receiver on/off</li>
+<li><strong>Info:</strong> Display program information</li>
+<li><strong>Select:</strong> Make selections and confirm choices</li>
+<li><strong>Up/Down Arrows:</strong> Navigate through menus and channels</li>
 </ul>
-<p style="margin-top:15px;"><strong>Connections:</strong></p>
-<ul class="button-list">
-<li><span class="button-name">HDMI Out:</span> <span class="button-desc">Connect to TV (best quality)</span></li>
-<li><span class="button-name">Satellite In:</span> <span class="button-desc">Coaxial cable from dish</span></li>
-<li><span class="button-name">Power:</span> <span class="button-desc">AC power cord</span></li>
+<p style="margin-bottom:15px;"><strong>Connections:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>HDMI Out:</strong> Connect to TV HDMI port (best quality)</li>
+<li><strong>Component Out:</strong> Red/Green/Blue video cables (alternative)</li>
+<li><strong>Satellite In:</strong> Coaxial cable from satellite dish</li>
+<li><strong>Power:</strong> AC power cord</li>
 </ul>
-<p style="margin-top:15px;"><strong>Common Issues & Solutions:</strong></p>
-<ul class="button-list">
-<li><span class="button-name">No Power:</span> <span class="button-desc">Check light switches near TV. If TV powers on, check power strip or outlet</span></li>
-<li><span class="button-name">Wrong Input:</span> <span class="button-desc">Change inputs manually with TV remote or button on TV</span></li>
-<li><span class="button-name">No Sound:</span> <span class="button-desc">Unplug TV and Wally for 30 seconds. If sound works on TV apps but not DISH, try different HDMI port or replace HDMI cable</span></li>
-<li><span class="button-name">Error Messages:</span> <span class="button-desc">"Complete Signal Loss" or "Programming Not Authorized" - Call 251-967-4455</span></li>
-<li><span class="button-name">Missing Channels:</span> <span class="button-desc">Call SecureVision at 251-967-4455</span></li>
-<li><span class="button-name">Picture Too Large:</span> <span class="button-desc">Screen formatting needed - Call 251-967-4455</span></li>
-<li><span class="button-name">Closed Captioning:</span> <span class="button-desc">Call 251-967-4455 for assistance</span></li>
+<p style="margin-bottom:15px;"><strong>Common Issues & Solutions:</strong></p>
+<ul style="margin-left:20px;">
+<li><strong>No Power:</strong> Check that light switches near the TV haven't been turned off. The receiver is often plugged into a switched outlet.</li>
+<li><strong>Wrong Input:</strong> Press INPUT on your TV remote and manually change through TV inputs (HDMI 1, HDMI 2, etc.) until you see the satellite receiver menu.</li>
+<li><strong>No Sound:</strong> Unplug both the TV and receiver for 30 seconds, then plug back in. Check TV volume isn't muted.</li>
+<li><strong>Error Messages:</strong> "Complete Signal Loss" means weather interference or dish alignment. Wait 10-15 minutes for storms to pass.</li>
 </ul>
 </div>
-</div>`
+`;
+}else if(property.receiver_model.includes('ViP 211') || property.receiver_model.includes('211')){
+html+=`
+<div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+<h4 style="color:#2C6F9E;margin-bottom:15px;">DISH ViP 211 Receiver</h4>
+<p style="margin-bottom:15px;"><strong>Front Panel Buttons:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>Power:</strong> Turn receiver on/off</li>
+<li><strong>Info:</strong> Display program information</li>
+<li><strong>Select:</strong> Make selections and confirm choices</li>
+<li><strong>Up/Down Arrows:</strong> Navigate through menus and channels</li>
+</ul>
+<p style="margin-bottom:15px;"><strong>Connections:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>HDMI Out:</strong> Connect to TV HDMI port (best quality)</li>
+<li><strong>Component Out:</strong> Red/Green/Blue video cables (alternative)</li>
+<li><strong>Satellite In:</strong> Coaxial cable from satellite dish</li>
+<li><strong>Power:</strong> AC power cord</li>
+</ul>
+<p style="margin-bottom:15px;"><strong>Common Issues & Solutions:</strong></p>
+<ul style="margin-left:20px;">
+<li><strong>No Power:</strong> Check that light switches near the TV haven't been turned off. The receiver is often plugged into a switched outlet.</li>
+<li><strong>Wrong Input:</strong> Press INPUT on your TV remote and manually change through TV inputs (HDMI 1, HDMI 2, etc.) until you see the satellite receiver menu.</li>
+<li><strong>No Sound:</strong> Unplug both the TV and receiver for 30 seconds, then plug back in. Check TV volume isn't muted.</li>
+<li><strong>Error Messages:</strong> "Complete Signal Loss" means weather interference or dish alignment. Wait 10-15 minutes for storms to pass.</li>
+</ul>
+</div>
+`;
+}
+
+const remoteType=getRemoteType(property.receiver_model);
+if(remoteType==='DISH 52.0/54.0'){
+html+=`
+<div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+<h4 style="color:#2C6F9E;margin-bottom:15px;">DISH 52.0/54.0 Remote Control</h4>
+<p style="margin-bottom:15px;"><strong>Key Buttons:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>TV (top):</strong> Switch to TV mode to control TV power and volume</li>
+<li><strong>INPUT:</strong> Change TV input sources</li>
+<li><strong>SAT:</strong> Switch back to satellite mode</li>
+<li><strong>GUIDE:</strong> View channel guide</li>
+<li><strong>INFO:</strong> Display program information</li>
+<li><strong>Numbers:</strong> Direct channel entry</li>
+</ul>
+<p style="margin-bottom:15px;"><strong>Remote Tips:</strong></p>
+<ul style="margin-left:20px;">
+<li>Press SAT button at top to control the satellite receiver</li>
+<li>Press TV button at top to control TV power and volume</li>
+<li>If buttons don't work, try new batteries</li>
+<li>Point remote at satellite receiver, not the TV</li>
+</ul>
+</div>
+`;
+}else if(remoteType==='DISH 40.0'){
+html+=`
+<div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+<h4 style="color:#2C6F9E;margin-bottom:15px;">DISH 40.0 Remote Control</h4>
+<p style="margin-bottom:15px;"><strong>Key Buttons:</strong></p>
+<ul style="margin-left:20px;margin-bottom:15px;">
+<li><strong>SAT:</strong> Switch to satellite mode</li>
+<li><strong>TV:</strong> Switch to TV mode</li>
+<li><strong>GUIDE:</strong> View channel guide</li>
+<li><strong>INFO:</strong> Display program information</li>
+<li><strong>MENU:</strong> Access settings</li>
+</ul>
+<p style="margin-bottom:15px;"><strong>Remote Tips:</strong></p>
+<ul style="margin-left:20px;">
+<li>Make sure you're in SAT mode (press SAT button)</li>
+<li>Replace batteries if buttons are unresponsive</li>
+<li>Point at satellite receiver</li>
+</ul>
+</div>
+`;
+}
+
+equipmentSection.innerHTML=html
 }else if(property.receiver_model.includes('ViP 211')){
-html+=`<div class="equipment-card">
+html+=`<div class="equipment-card open">
 <h4 onclick="this.parentElement.classList.toggle('open')">
 DISH ViP 211 Receiver
 <span class="equipment-toggle">▼</span>
@@ -3416,7 +3488,7 @@ DISH ViP 211 Receiver
 </div>`
 }
 if(getRemoteType(property.receiver_model)==='DISH 52.0/54.0'){
-html+=`<div class="equipment-card">
+html+=`<div class="equipment-card open">
 <h4 onclick="this.parentElement.classList.toggle('open')">
 DISH 52.0/54.0 Remote Control
 <span class="equipment-toggle">▼</span>
@@ -3436,7 +3508,7 @@ DISH 52.0/54.0 Remote Control
 </div>
 </div>`
 }else if(getRemoteType(property.receiver_model)==='DISH 40.0'){
-html+=`<div class="equipment-card">
+html+=`<div class="equipment-card open">
 <h4 onclick="this.parentElement.classList.toggle('open')">
 DISH 40.0 Remote Control
 <span class="equipment-toggle">▼</span>
@@ -3460,12 +3532,38 @@ equipmentSection.innerHTML=html
 }
 function populateChannels(tvPackage){
 const channelSection=document.getElementById('channelSection');
-let html='<h3 onclick="this.parentElement.classList.toggle(\'open\')">📺 Your Channel Lineup<span class="section-toggle">▼</span></h3>';
-html+='<div class="channel-section-content">';
+let html='<h3 style="color:#2C6F9E;margin:30px 0 20px 0;">📺 Your Channel Lineup</h3>';
 html+='<p style="margin-bottom:20px;">These are the channels included in your <strong>'+tvPackage+'</strong> package:</p>';
+
 let channelsToShow=[];
 if(tvPackage==='Basic Plus'){
 channelsToShow=basicPlusChannels
+}else if(tvPackage==='Expanded'){
+channelsToShow=basicPlusChannels;
+html+='<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;margin-bottom:20px;border-radius:5px;"><strong>Note:</strong> You have the Expanded package, which includes all Basic Plus channels PLUS additional premium sports and movie channels.</div>'
+}else if(tvPackage==='Premier'){
+channelsToShow=basicPlusChannels;
+html+='<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;margin-bottom:20px;border-radius:5px;"><strong>Note:</strong> You have the Premier package, which includes all channels plus Starz and Encore packages (15 premium channels).</div>'
+}else if(tvPackage==='Premium'){
+channelsToShow=basicPlusChannels;
+html+='<div style="background:#fff3cd;border-left:4px solid #ffc107;padding:15px;margin-bottom:20px;border-radius:5px;"><strong>Note:</strong> You have the Premium package - our ultimate tier with ALL channels including HBO, Cinemax, Showtime, and more (60+ premium channels total).</div>'
+}else{
+html+='<p>Contact support for your specific channel lineup information.</p>'
+}
+
+if(channelsToShow.length>0){
+html+='<div class="channel-grid">';
+channelsToShow.forEach(channel=>{
+const hdBadge=channel.hd?'<span class="hd-badge">HD</span>':'';
+html+=`<div class="channel-item">
+<span class="channel-name">${channel.name}${hdBadge}</span>
+<span class="channel-number">${channel.number}</span>
+</div>`
+});
+html+='</div>'
+}
+
+channelSection.innerHTML=html
 }else if(tvPackage==='Expanded'){
 channelsToShow=basicPlusChannels;
 html+='<div class="tip-box"><strong>Note:</strong> You have the Expanded package, which includes all Basic Plus channels PLUS additional premium sports and movie channels.</div>'
@@ -3490,7 +3588,8 @@ html+=`<div class="channel-item">
 html+='</div>'
 }
 html+='</div>';
-channelSection.innerHTML=html
+channelSection.innerHTML=html;
+channelSection.classList.add('open')
 }
 backButton.addEventListener('click',function(){
 propertyDetails.classList.remove('active');
