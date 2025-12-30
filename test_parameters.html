@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Parameter Test</title>
+<style>
+body{font-family:Arial;padding:20px;max-width:800px;margin:0 auto}
+.box{background:#f0f0f0;padding:20px;margin:20px 0;border-radius:10px}
+h1{color:#2C6F9E}
+</style>
+</head>
+<body>
+<h1>🧪 URL Parameter Test</h1>
+
+<div class="box">
+<h2>Current URL:</h2>
+<pre id="currentUrl"></pre>
+</div>
+
+<div class="box">
+<h2>Property Parameter:</h2>
+<pre id="propertyParam"></pre>
+</div>
+
+<div class="box">
+<h2>Test Property Names:</h2>
+<div id="testResults"></div>
+</div>
+
+<div class="box">
+<h2>Test These URLs:</h2>
+<ul>
+<li><a href="?property=Phoenix%20V">Phoenix V</a></li>
+<li><a href="?property=Romar%20House">Romar House</a></li>
+<li><a href="?property=Lighthouse">Lighthouse</a></li>
+</ul>
+</div>
+
+<script>
+// Test property data
+const testProperties = [
+  {name: 'Phoenix V', tv_package: 'Expanded', receiver_model: '211'},
+  {name: 'Romar House', tv_package: 'Expanded', receiver_model: 'Wally'},
+  {name: 'Lighthouse', tv_package: 'Expanded', receiver_model: 'Wally'}
+];
+
+// Get URL parameter function
+function getUrlParameter(name){
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  const results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// Display current URL
+document.getElementById('currentUrl').textContent = window.location.href;
+
+// Get and display property parameter
+const propertyParam = getUrlParameter('property');
+document.getElementById('propertyParam').textContent = propertyParam || 'No property parameter found';
+
+// Test matching
+const resultsDiv = document.getElementById('testResults');
+if(propertyParam){
+  const exactMatch = testProperties.find(p => p.name.toLowerCase() === propertyParam.toLowerCase());
+  if(exactMatch){
+    resultsDiv.innerHTML = `
+      <p style="color:green;font-weight:bold">✅ MATCH FOUND!</p>
+      <p><strong>Property:</strong> ${exactMatch.name}</p>
+      <p><strong>TV Package:</strong> ${exactMatch.tv_package}</p>
+      <p><strong>Receiver:</strong> ${exactMatch.receiver_model}</p>
+    `;
+  }else{
+    resultsDiv.innerHTML = `
+      <p style="color:red;font-weight:bold">❌ NO MATCH</p>
+      <p>Looking for: "${propertyParam}"</p>
+      <p>Available properties:</p>
+      <ul>
+        ${testProperties.map(p => `<li>${p.name}</li>`).join('')}
+      </ul>
+    `;
+  }
+}else{
+  resultsDiv.innerHTML = '<p>Click a test link above to see parameter handling in action.</p>';
+}
+</script>
+</body>
+</html>
